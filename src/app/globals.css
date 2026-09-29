@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background: #1c201d;
+}
+
+body {
+  @apply bg-ink font-sans font-light text-bone antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #9dbfa9;
+  color: #1c201d;
+}
+
+:focus-visible {
+  outline: 2px solid #9dbfa9;
+  outline-offset: 4px;
+}
+
+/* the one animation that exists purely to invite the first scroll */
+@keyframes cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  50.01% {
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+.cue-line {
+  animation: cue 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* film grain: tiny noise tile, jittered in steps like real emulsion */
+.film-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  17% { transform: translate(-4%, 3%); }
+  33% { transform: translate(3%, -5%); }
+  50% { transform: translate(-6%, -2%); }
+  67% { transform: translate(5%, 4%); }
+  83% { transform: translate(-2%, 6%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* a warm shaft of light drifting across the frame */
+.light-sweep {
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 228, 180, 0.35) 50%, transparent 70%);
+  background-size: 250% 100%;
+  animation: sweep 14s ease-in-out infinite alternate;
+}
+@keyframes sweep {
+  from { background-position: 100% 0; }
+  to { background-position: 0% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-grain, .light-sweep { animation: none; }
+}
+
+.push-in { animation: pushin 1.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes pushin {
+  from { transform: scale(1.35); opacity: 0; filter: blur(6px); }
+  to { transform: scale(1); opacity: 1; filter: blur(0); }
+}
+@media (prefers-reduced-motion: reduce) { .push-in { animation: none; } }
+
+@keyframes lbfade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
